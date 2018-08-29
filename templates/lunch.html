@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}점심 메뉴 추천 {% endblock %}
+
+{% block body%}
+    <h1>{{lunch}} 먹으러간다~</h1>
+    <hr/>
+        {% for menu in box %}
+        <p>{{menu}}</p>
+        {% endfor %}
+    <hr/>
+    
+{% endblock %}
