@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # flask run --host 0.0.0.0 --port 8080
-from flask import Flask, render_template,request
+from flask import Flask, render_template,request,url_for
 from datetime import datetime
 import random
 import requests
@@ -59,8 +59,28 @@ def opgg():
 def opggresult():
     userName=request.args.get('q')
     url = 'http://www.op.gg/summoner/userName={}'.format(userName)
+    
     res = requests.get(url)
     result = BeautifulSoup(res.content, 'html.parser')
     tier = result.select_one('#SummonerLayoutContent > div.tabItem.Content.SummonerLayoutContent.summonerLayout-summary > div.SideContent > div.TierBox.Box > div.SummonerRatingMedium > div.TierRankInfo > div.TierRank > span').text
-    
-    return render_template("opggresult.html",userName=userName,tier=tier)
+    gold = "Gold"
+    platinum = "Platinum"
+    silver = "Silver"
+    bronze = "Bronze"
+    diamond = "Diamond"
+    unranked ="Unranked"
+    imgurl = "https://opgg-static.akamaized.net/images/medals/"
+    if gold in tier:
+        imgurl+="gold_1.png"
+    elif platinum in tier:
+        imgurl+="platinum_1.png"
+    elif silver in tier:
+        imgurl+="silver_1.png"
+    elif bronze in tier:
+        imgurl+="bronze_1.png"
+    elif diamond in tier:
+        imgurl+="diamond_1.png"
+    elif unranked in tier:
+        imgurl+="default.png"
+    print(imgurl)
+    return render_template("opggresult.html",userName=userName,tier=tier,imgurl=imgurl)
